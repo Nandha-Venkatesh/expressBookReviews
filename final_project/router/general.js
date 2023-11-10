@@ -88,4 +88,50 @@ public_users.get('/review/:isbn',function (req, res) {
     res.send(books[isbn]["reviews"]);
 });
 
+
+public_users.get("/books", (req, res) => {
+    const booklist = new Promise((resolve, reject) => {
+        resolve(res.send(JSON.stringify({books}, null, 4)));
+    });
+    
+    books.then(() => console.log("Promise to retrieve books resolved."));
+});
+
+public_users.get("/books/isbn/:isbn", (req, res) => {
+    const isbn = req.params.isbn;
+
+    const book = new Promise((resolve, reject) => {
+        let retrieved_book = books[isbn];
+        resolve(res.send(JSON.stringify({retrieved_book}, null, 4)));
+    })
+
+    book.then(() => console.log("Promise to retrieve book by ISBN number resolved."));
+});
+
+public_users.get("/books/author/:author", (req, res) => {
+    const author = req.params.author;
+
+    const book = new Promise((resolve, reject) => {
+        let matching_books = Object.values(books).filter((book) => {
+            return book.author === author;
+        });
+        resolve(res.send(JSON.stringify({matching_books}, null, 4)));
+    })
+
+    book.then(() => console.log("Promise to retrieve books by author resolved."));
+});
+
+public_users.get("/books/title/:title", (req, res) => {
+    const title = req.params.title;
+
+    const book = new Promise((resolve, reject) => {
+        let matching_books = Object.values(books).filter((book) => {
+            return book.title === title;
+        });
+        resolve(res.send(JSON.stringify({matching_books}, null, 4)));
+    })
+
+    book.then(() => console.log("Promise to retrieve books by title resolved."));
+});
+
 module.exports.general = public_users;
